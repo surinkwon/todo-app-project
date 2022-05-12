@@ -1,23 +1,27 @@
 <template>
   <div>
     <ul>
-      <li v-for="(todo, idx) in todoData" :key="`todo-${idx}`"><span :class="{ completed: todo.completed }" @click="toggleTodo(idx)">{{ todo.item }}</span> 
-        <i class="fa-solid fa-square-minus removeIcon" @click="removeTodo(idx)"></i></li>
+      <li v-for="(todo, idx) in $store.state.todos" :key="`todo-${idx}`">
+        <i class="fa-regular fa-square-check checkBox" v-if="todo.completed" @click="toggleTodo(idx)"></i>
+        <i class="fa-regular fa-square checkBox" v-else @click="toggleTodo(idx)"></i>
+        <span @click="toggleTodo(idx)">{{ todo.item }}</span> 
+        <i class="fa-solid fa-square-minus removeIcon" @click="removeTodo(todo, idx)"></i></li>
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  props: {
-    todoData: Array
-  },
   methods: {
-    removeTodo(idx) {
-      this.$emit('removeTodo', idx)
+    removeTodo(todo, idx) {
+      const obj = {
+        todoItem: todo.item,
+        idx: idx,
+      }
+      this.$store.commit('REMOVE_TODO', obj)
     },
     toggleTodo(idx) {
-      this.$emit('toggleTodo', idx)
+      this.$store.commit('TOGGLE_TODO', idx)
     },
   },
 }
@@ -31,6 +35,7 @@ li {
 
 .removeIcon {
   margin-left: auto;
+  line-height: 24px;
   color: rgb(241, 80, 80);
   cursor: pointer;
 }
@@ -42,5 +47,12 @@ li {
 
 span {
   cursor: pointer;
+}
+
+.checkBox {
+  margin-right: 10px;
+  line-height: 24px;
+  cursor: pointer;
+  color: rgb(182, 105, 233);
 }
 </style>

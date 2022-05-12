@@ -15,7 +15,7 @@ export default {
   methods: {
     addTodo() {
       if (this.newTodoItem) {
-        this.$emit('addTodo', this.newTodoItem)
+        this.$store.commit('ADD_TODO', this.newTodoItem)
         this.clearInput()
       }
     },
